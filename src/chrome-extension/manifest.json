@@ -1,0 +1,16 @@
+{
+    "manifest_version": 3,
+    "name": "Phishing Site Checker",
+    "version": "1.0",
+    "description": "Checks if the current site is safe using the latest phishing data from trusted sources.",
+    "permissions": ["storage", "tabs", "scripting"],
+    "host_permissions": ["<all_urls>"],
+    "background": {
+      "service_worker": "background.js"
+    },
+    "action": {
+      "default_popup": "popup/popup.html",
+      "default_icon": "icons/icon-64.png"
+    }
+  }
+  
