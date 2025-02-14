@@ -11,6 +11,11 @@
     "action": {
       "default_popup": "popup/popup.html",
       "default_icon": "icons/icon-64.png"
+    },
+    "icons": {
+      "24": "icons/icon-24.png",
+      "32": "icons/icon-32.png",
+      "48": "icons/icon-48.png",
+      "64": "icons/icon-64.png"
     }
-  }
-  
+}
