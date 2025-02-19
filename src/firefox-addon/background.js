@@ -1,21 +1,40 @@
 async function updatePhishingData() {
     try {
-        var response = await fetch("https://raw.githubusercontent.com/vishwas-r/phishing-links-database/refs/heads/main/domains.json");
-        var data = await response.json();
-        await browser.storage.local.set({ phishingList: data });
-        console.log("Phishing data updated.");
+        var { selectedSources = [] } = await browser.storage.local.get("selectedSources");
+
+        if (!Array.isArray(selectedSources) || selectedSources.length === 0) {
+            console.warn("No sources selected for update.");
+            return;
+        }
+
+        var updatePromises = selectedSources.map(async (source) => {
+            try {
+                var response = await fetch(source.url);
+                var data = await response.json();
+                await browser.storage.local.set({ [source.source]: data });
+                console.log(`Updated ${source.source}: ${data.length} entries`);
+            } catch (error) {
+                console.error(`Failed to update ${source.source}:`, error);
+            }
+        });
+
+        await Promise.all(updatePromises);
+        console.log("All phishing data updated.");
     } catch (error) {
         console.error("Failed to update phishing data:", error);
     }
 }
 
 async function checkUrl(url) {
-    var { phishingList = [] } = await browser.storage.local.get("phishingList");
-    return phishingList.some(entry => url.includes(entry.DomainAddress));
+    var storedData = await browser.storage.local.get();
+    var isPhishing = Object.values(storedData).some(list =>
+        Array.isArray(list) && list.some(phishingUrl => url.includes(phishingUrl))
+    );
+    return isPhishing;
 }
 
 browser.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
-    if (changeInfo.status === "complete" && tab.url) {
+    if (changeInfo.status === "complete") {
         var isPhishing = await checkUrl(tab.url);
         browser.browserAction.setIcon({
             tabId,
@@ -28,7 +47,7 @@ browser.runtime.onInstalled.addListener(updatePhishingData);
 
 browser.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.action === "updateData") {
-        updatePhishingData();
-        sendResponse({ status: "Updating..." });
+        updatePhishingData().then(() => sendResponse({ status: "Updated" }));
+        return true;
     }
 });
