@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         setTimeout(function () {
             statusMsg.innerText = isPhishing ? "⚠️Phishing Site" : "✅Safe Site";
             header.style.backgroundColor = statusMsg.style.color = isPhishing ? "red" : "green";
-        }, 1000);
+        }, 500);
     }
 
     async function updateSourceCounts() {
