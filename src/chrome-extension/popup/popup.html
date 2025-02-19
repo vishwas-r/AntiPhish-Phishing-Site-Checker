@@ -12,7 +12,7 @@
             box-sizing: border-box;
             background-color: #f9f9f9;
             color: #333;
-            min-width: 350px;           
+            min-width: 450px;
         }
 
         #header {
@@ -38,39 +38,75 @@
             border-radius: 5px;
             background-color: #f2f2f2;
         }
-        .btn-container {
-            display: flex;
+        .section {
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .h2 {
+            text-align: center;
+            text-transform: uppercase;
+            text-decoration: none;
+            letter-spacing: .1em;
         }
         .btn {
-            width: 50%;
-            padding: 10px;
-            margin: 0 2px 15px;
+            display: block;
+            width: 100%;
+            padding: 12px;
             font-size: 14px;
+            font-weight: bold;
+            text-align: center;
             cursor: pointer;
             border: none;
+            border-radius: 5px;
             background-color: #007BFF;
             color: white;
-            border-radius: 5px;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.1s;
+            margin-top: 8px;
         }
-
         .btn:hover {
             background-color: #005a9e;
         }
-
+        .btn:active {
+            transform: scale(0.98);
+        }
+        .btn-warning {
+            background-color: #ff9800;
+        }
+        .btn-warning:hover {
+            background-color: #e68900;
+        }
+        .icon {
+            width: 24px;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+        #sources {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            background: #f1f1f1;
+        }
+        #sources label {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        #sources input {
+            margin-right: 10px;
+        }
         footer {
             text-align: center;
             background-color: #f1f1f1;
             padding: 10px;
             border-top: 2px solid #ddd;
-        }
-        
-        footer p {
             font-size: 0.9em;
             color: #555;
         }
-        
-        .heart {
+        .heart, .text-danger {
             color: red;
         }
     </style>
@@ -80,17 +116,37 @@
         <h1><img class="icon" src="/icons/icon-24.png"> Phishing Site Checker</h1>
         <p>Checks if the current site is safe using the latest phishing data from trusted sources.</p>
     </header>
+
     <div id="content">
-        <div id="status">Checking...</div>
-        <div class="btn-container">
-            <button class="btn" id="check">Check Current Site</button>
-            <button class="btn" id="update" title="Udpate it once in a while. Frequent Update might block your IP from updating again.">Update Database</button>
+        <div class="section" id="statusSection">
+            <h2 class="h2">Check Current Site</h2>
+            <div id="status">Checking...</div>
+            <button class="btn" id="verifyURL">Verify This Site</button>
+            <p id="dbInfo"></p>
         </div>
+
+        <div class="section">
+            <h2 class="h2 db-h2">Update Phishing Database</h2>
+            <div id="sources">
+                <p>Select from multiple phishing database sources and click 'Update Database' to fetch and store the latest phishing site data.</p>
+                <label>
+                    <input type="checkbox" data-url="https://raw.githubusercontent.com/vishwas-r/phishing-links-database/refs/heads/main/cert_urls.json" value="Cert.pl" checked><span> Cert.pl</span>
+                </label>
+                <label>
+                    <input type="checkbox" data-url="https://raw.githubusercontent.com/vishwas-r/phishing-links-database/refs/heads/main/phishcoza_urls.json" value="Phish.co.za"><span> Phish.co.za</span>
+                </label>
+                <p class="text-danger"><strong>Note:</strong> Avoid updating too frequently, as excessive requests may temporarily block your IP.</p>
+                <button class="btn btn-warning" id="updateDB">Update Database</button>
+            </div>
+        </div>
+
     </div>
+
     <footer>
         <p>Built with <span class="heart">❤</span> for safe browsing.</p>
         <p>© 2025 <a href="https://vishwas.me" target="_blank">Vishwas</a></p>
     </footer>
+
     <script src="popup.js"></script>
 </body>
 </html>
