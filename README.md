@@ -9,7 +9,22 @@ Phishing Site Checker is a Chrome extension that helps you stay safe online by c
 ## How it Works
 The extension checks the active tab's URL against a local database of phishing sites, which is updated regularly. If the site is detected as phishing, the extension will alert you.
 
-![Safe Site](https://raw.githubusercontent.com/vishwas-r/Phishing-Site-Checker/refs/heads/main/screenshots/firefox-addon-safe-site.png)
+## Screenshots:
+
+### Safe Site
+![Safe Site](https://github.com/vishwas-r/Phishing-Site-Checker/blob/main/screenshots/chrome-extension-safe-site.png?raw=true)
+
+----
+<br/>
+
+### Unsafe Site
+![Unsafe Site](https://github.com/vishwas-r/Phishing-Site-Checker/blob/main/screenshots/chrome-extension-unsafe-site.png?raw=true)
+
+----
+<br/>
+
+### Update Database
+![Update Database](https://github.com/vishwas-r/Phishing-Site-Checker/blob/main/screenshots/chrome-extension-update-database.png?raw=true)
 
 ## Permissions
 - **storage**: To store phishing URLs locally for quick checks.
