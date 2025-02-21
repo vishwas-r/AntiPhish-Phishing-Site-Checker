@@ -1,6 +1,6 @@
 {
     "manifest_version": 3,
-    "name": "Phishing Site Checker",
+    "name": "AntiPhish - Phishing Site Checker",
     "version": "2.0",
     "description": "Checks if the current site is safe using the latest phishing data from trusted sources.",
     "permissions": ["storage", "tabs", "scripting"],

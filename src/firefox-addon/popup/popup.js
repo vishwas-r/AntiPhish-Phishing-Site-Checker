@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         setTimeout(function () {
             statusMsg.innerText = isPhishing ? "⚠️ Phishing Site" : "✅ Safe Site";
-            header.style.backgroundColor = statusMsg.style.color = isPhishing ? "red" : "green";
+            statusMsg.style.color = isPhishing ? "red" : "green";
         }, 500);
     }
 
