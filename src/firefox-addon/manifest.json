@@ -5,7 +5,7 @@
   "description": "Checks if the current site is safe using the latest phishing data from trusted sources.",
   "permissions": ["storage", "tabs"],
   "background": {
-      "scripts": ["background.js"],
+      "scripts": ["idb.js", "background.js"],
       "persistent": false
   },
   "browser_action": {

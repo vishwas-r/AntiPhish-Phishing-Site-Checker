@@ -5,19 +5,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         header = document.getElementById("header"),
         sourceCheckboxes = document.querySelectorAll("#sources input[type='checkbox']");
 
-    async function getSelectedSources() {
-        var { selectedSources = [] } = await browser.storage.local.get("selectedSources");
-        return selectedSources;
-    }
-
-    async function saveSelectedSources() {
-        var selectedSources = Array.from(sourceCheckboxes)
-            .filter(cb => cb.checked)
-            .map(cb => ({ source: cb.value, url: cb.getAttribute("data-url") }));
-
-        await browser.storage.local.set({ selectedSources });
-    }
-
     async function checkSite() {
         statusMsg.textContent = "⏳ Checking Site, Please Wait...";
         statusMsg.style.color = "#333";
@@ -25,10 +12,8 @@ document.addEventListener("DOMContentLoaded", async function () {
         var [tab] = await browser.tabs.query({ active: true, currentWindow: true });
         var url = tab.url;
 
-        var phishingLists = await browser.storage.local.get();
-        var isPhishing = Object.values(phishingLists).some(list =>
-            Array.isArray(list) && list.some(phishingUrl => url.includes(phishingUrl))
-        );
+        var phishingLists = await getPhishingData();
+        var isPhishing = phishingLists.some(entry => entry.data.some(phishingUrl => url.includes(phishingUrl)));
 
         setTimeout(function () {
             statusMsg.innerText = isPhishing ? "⚠️ Phishing Site" : "✅ Safe Site";
@@ -37,11 +22,11 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     async function updateSourceCounts() {
-        var storedData = await browser.storage.local.get();
+        var storedData = await getPhishingData();
 
         sourceCheckboxes.forEach(cb => {
             var sourceName = cb.value;
-            var count = Array.isArray(storedData[sourceName]) ? storedData[sourceName].length : 0;
+            var count = storedData.find(entry => entry.source === sourceName)?.data.length || 0;
 
             var span = cb.nextElementSibling;
             if (span && span.tagName === "SPAN") {
@@ -57,7 +42,11 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     function handleCheckboxChange() {
-        saveSelectedSources();
+        var selectedSources = Array.from(sourceCheckboxes)
+            .filter(cb => cb.checked)
+            .map(cb => ({ source: cb.value, url: cb.getAttribute("data-url") }));
+
+        saveSelectedSources(selectedSources);
         updateButtonState();
     }
 

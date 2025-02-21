@@ -1,6 +1,6 @@
 async function updatePhishingData() {
     try {
-        var { selectedSources = [] } = await browser.storage.local.get("selectedSources");
+        var selectedSources = await getSelectedSources();
 
         if (!Array.isArray(selectedSources) || selectedSources.length === 0) {
             console.warn("No sources selected for update.");
@@ -11,7 +11,7 @@ async function updatePhishingData() {
             try {
                 var response = await fetch(source.url);
                 var data = await response.json();
-                await browser.storage.local.set({ [source.source]: data });
+                await savePhishingData(source.source, data);
                 console.log(`Updated ${source.source}: ${data.length} entries`);
             } catch (error) {
                 console.error(`Failed to update ${source.source}:`, error);
@@ -26,11 +26,8 @@ async function updatePhishingData() {
 }
 
 async function checkUrl(url) {
-    var storedData = await browser.storage.local.get();
-    var isPhishing = Object.values(storedData).some(list =>
-        Array.isArray(list) && list.some(phishingUrl => url.includes(phishingUrl))
-    );
-    return isPhishing;
+    var storedData = await getPhishingData();
+    return storedData.some(entry => entry.data.some(phishingUrl => url.includes(phishingUrl)));
 }
 
 browser.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
