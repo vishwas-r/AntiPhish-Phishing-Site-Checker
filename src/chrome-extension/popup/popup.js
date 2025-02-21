@@ -5,43 +5,28 @@ document.addEventListener("DOMContentLoaded", async function () {
         header = document.getElementById("header"),
         sourceCheckboxes = document.querySelectorAll("#sources input[type='checkbox']");
 
-    async function getSelectedSources() {
-        var { selectedSources = [] } = await chrome.storage.local.get("selectedSources");
-        return selectedSources;
-    }
-
-    async function saveSelectedSources() {
-        var selectedSources = Array.from(sourceCheckboxes)
-            .filter(cb => cb.checked)
-            .map(cb => ({ source: cb.value, url: cb.getAttribute("data-url") }));
-
-        await chrome.storage.local.set({ selectedSources });
-    }
-
     async function checkSite() {
-        statusMsg.textContent = "⏳Checking Site, Please Wait...";
+        statusMsg.textContent = "⏳ Checking Site, Please Wait...";
         statusMsg.style.color = "#333";
 
         var [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
         var url = tab.url;
 
-        var phishingLists = await chrome.storage.local.get();
-        var isPhishing = Object.values(phishingLists).some(list =>
-            Array.isArray(list) && list.some(phishingUrl => url.includes(phishingUrl))
-        );
+        var phishingLists = await getPhishingData();
+        var isPhishing = phishingLists.some(entry => entry.data.some(phishingUrl => url.includes(phishingUrl)));
 
         setTimeout(function () {
-            statusMsg.innerText = isPhishing ? "⚠️Phishing Site" : "✅Safe Site";
+            statusMsg.innerText = isPhishing ? "⚠️ Phishing Site" : "✅ Safe Site";
             header.style.backgroundColor = statusMsg.style.color = isPhishing ? "red" : "green";
         }, 500);
     }
 
     async function updateSourceCounts() {
-        var storedData = await chrome.storage.local.get(null);
+        var storedData = await getPhishingData();
 
         sourceCheckboxes.forEach(cb => {
             var sourceName = cb.value;
-            var count = Array.isArray(storedData[sourceName]) ? storedData[sourceName].length : 0;
+            var count = storedData.find(entry => entry.source === sourceName)?.data.length || 0;
 
             var span = cb.nextElementSibling;
             if (span && span.tagName === "SPAN") {
@@ -57,7 +42,11 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     function handleCheckboxChange() {
-        saveSelectedSources();
+        var selectedSources = Array.from(sourceCheckboxes)
+            .filter(cb => cb.checked)
+            .map(cb => ({ source: cb.value, url: cb.getAttribute("data-url") }));
+
+        saveSelectedSources(selectedSources);
         updateButtonState();
     }
 
@@ -70,12 +59,12 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
 
     updateDbBtn.addEventListener("click", async function () {
-        statusMsg.textContent = "⏳Updating Database...";
+        statusMsg.textContent = "⏳ Updating Database...";
         statusMsg.style.color = "#ff8c00";
 
         await chrome.runtime.sendMessage({ action: "updateData" });
 
-        statusMsg.textContent = "✅Database Updated";
+        statusMsg.textContent = "✅ Database Updated";
         statusMsg.style.color = "green";
 
         await updateSourceCounts();

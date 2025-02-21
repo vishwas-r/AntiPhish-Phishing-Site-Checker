@@ -110,6 +110,7 @@
             color: red;
         }
     </style>
+    <script src="../idb.js"></script>
 </head>
 <body>
     <header id="header">
@@ -130,7 +131,10 @@
             <div id="sources">
                 <p>Select from multiple phishing database sources and click 'Update Database' to fetch and store the latest phishing site data.</p>
                 <label>
-                    <input type="checkbox" data-url="https://raw.githubusercontent.com/vishwas-r/phishing-links-database/refs/heads/main/cert_urls.json" value="Cert.pl" checked><span> Cert.pl</span>
+                    <input type="checkbox" data-url="https://raw.githubusercontent.com/vishwas-r/phishing-links-database/refs/heads/main/phishtank_urls.json" value="PhishTank.org" checked><span> PhishTank.org</span>
+                </label>
+                <label>
+                    <input type="checkbox" data-url="https://raw.githubusercontent.com/vishwas-r/phishing-links-database/refs/heads/main/cert_urls.json" value="Cert.pl"><span> Cert.pl</span>
                 </label>
                 <label>
                     <input type="checkbox" data-url="https://raw.githubusercontent.com/vishwas-r/phishing-links-database/refs/heads/main/phishcoza_urls.json" value="Phish.co.za"><span> Phish.co.za</span>
