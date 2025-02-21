@@ -1,6 +1,10 @@
-# 🛡️ Phishing Site Checker – Multi-Source Protection, Updated Regularly  
+# Phishing Site Checker – Multi-Source Protection, Updated Regularly  
 
-Phishing Site Checker is a **Chrome extension** that helps you stay safe online by detecting phishing websites in **real-time**. It checks the current website against the **latest phishing data from multiple trusted sources**, keeping you protected from fraudulent sites, fake login pages, and online scams.  
+Phishing Site Checker is a **Chrome extension** that helps you stay safe online by detecting phishing websites in **real-time**. It checks the current website against the **latest phishing data from multiple trusted sources**, keeping you protected from fraudulent sites, fake login pages, and online scams.
+
+## Addons / Extensions
+Firefox - https://addons.mozilla.org/en-US/firefox/addon/phishing-site-checker/ <br/>
+Chrome - https://chromewebstore.google.com/detail/phishing-site-checker/bjomammnnigdkjaikokafpoadegoehgj
 
 ## 🔍 Features  
 - **Real-time phishing detection** – Instantly checks if a site is flagged as unsafe.  
